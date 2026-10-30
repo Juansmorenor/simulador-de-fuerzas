@@ -65,14 +65,16 @@ body{
 
 .brand{ display:flex; align-items:center; gap:12px; }
 .brand-icon{
-  width:42px; height:42px;
-  border:1.5px solid var(--primary);
-  color:var(--primary);
-  border-radius:9px;
+  width:46px; height:46px;
+  border:1px solid var(--line-2);
+  border-radius:50%;
+  overflow:hidden;
   display:flex; align-items:center; justify-content:center;
-  background:var(--primary-soft);
+  background:#fff;
+  box-shadow:var(--shadow);
   flex:0 0 auto;
 }
+.brand-icon img{ width:100%; height:100%; object-fit:contain; display:block; }
 .brand-text h1{
   margin:0; font-size:17px; font-weight:650; letter-spacing:-.01em;
 }

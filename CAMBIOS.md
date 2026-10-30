@@ -1,3 +1,7 @@
+# Cambios · versión 1.3 (30-oct-2026)
+
+- **Escudo institucional en la cabecera:** el icono genérico de trazo (`#i-marca`) se reemplazó por el escudo de la Universidad de Pamplona. El archivo `assets/logo-upamplona.png` quedó en un lienzo cuadrado de 512 × 512 px con el sello centrado y márgenes blancos iguales a los lados, para que no se deforme dentro de un contenedor circular. El contenedor `.brand-icon` pasó a ser un disco blanco de 46 px con borde suave y `object-fit: contain`.
+
 # Cambios · versión 1.2 (30-oct-2026)
 
 - **Iconografía nueva:** los caracteres sueltos (□ ⊙ ∕ ∿ ◎ ✓ ✗ ∅ ⚠) se cambiaron por un juego de iconos SVG de trazo uniforme (sprite al inicio de `index.html`, helper `ico()` en `app.js`). Los botones de cabecera, herramientas de la vista, edición, verificación y las tarjetas de estado llevan su icono; el aviso «revisar / falta dato» de la escena dibuja un triángulo.

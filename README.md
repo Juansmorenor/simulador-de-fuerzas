@@ -27,6 +27,7 @@ Simulador mecánico en 3D desarrollado para la **Universidad de Pamplona** (colo
 ├── engine.js       # Motor de cálculo puro (sin DOM)
 ├── app.js          # Escena Three.js, flujos de construcción y UI
 ├── styles.css      # Tema visual Universidad de Pamplona
+├── assets/         # Escudo UP: logo-upamplona.png (512 × 512) y su original 377 × 497
 ├── CAMBIOS.md      # Historial de cambios
 ├── tests/engine.test.js  # Pruebas del motor de cálculo
 └── README.md       # Este archivo
