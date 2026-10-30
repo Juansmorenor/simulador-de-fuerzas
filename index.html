@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simulador tridimensional interactivo · Equilibrio mecánico</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700;6..12,800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<!-- Iconos (trazo 1.8, extremos redondeados) -->
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+  <defs>
+    <symbol id="i-marca" viewBox="0 0 24 24"><circle cx="12" cy="12" r="2.4"/><path d="M12 9.6V3m0 0-2.4 2.4M12 3l2.4 2.4"/><path d="M14 13.3l5.7 3.3m0 0-.9-3.2m.9 3.2-3.3.9"/><path d="M10 13.3l-5.7 3.3m0 0 3.3.9m-3.3-.9.9-3.2"/></symbol>
+    <symbol id="i-cuerpo" viewBox="0 0 24 24"><path d="M12 3 20 7.5v9L12 21l-8-4.5v-9z"/><path d="M4 7.5 12 12l8-4.5M12 12v9"/></symbol>
+    <symbol id="i-anclaje" viewBox="0 0 24 24"><path d="M3 5h18"/><path d="M6 5 8 2.5M10.5 5l2-2.5M15 5l2-2.5M19.5 5 21 3"/><path d="M12 5v8"/><circle cx="12" cy="16" r="3"/></symbol>
+    <symbol id="i-cuerda" viewBox="0 0 24 24"><circle cx="5" cy="5" r="2"/><circle cx="19" cy="19" r="2"/><path d="M6.5 6.5c2 2 1 4 3 6s4 1 6 3 1.3 1.6 2.1 2.1"/></symbol>
+    <symbol id="i-resorte" viewBox="0 0 24 24"><path d="M2 12h3l1.5-5 3 10 3-10 3 10 3-10L20 12h2"/></symbol>
+    <symbol id="i-polea" viewBox="0 0 24 24"><path d="M12 2v4"/><circle cx="12" cy="11" r="5"/><circle cx="12" cy="11" r="1.2"/><path d="M7 11v11M17 11v6"/><rect x="15" y="17" width="4" height="4" rx=".6"/></symbol>
+    <symbol id="i-conectar" viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.7 0l3.6-3.6a4 4 0 0 0-5.7-5.7L12 6.3"/><path d="M14 10a4 4 0 0 0-5.7 0l-3.6 3.6a4 4 0 0 0 5.7 5.7l1.6-1.6"/></symbol>
+    <symbol id="i-eliminar" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4.5h6V7M6 7l1 13h10l1-13M10 11v6M14 11v6"/></symbol>
+    <symbol id="i-nuevo" viewBox="0 0 24 24"><path d="M14 3H6v18h12V7z"/><path d="M14 3v4h4M12 11v6M9 14h6"/></symbol>
+    <symbol id="i-restablecer" viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 0 2.4-5.7L4 8.6"/><path d="M4 4v4.6h4.6"/></symbol>
+    <symbol id="i-ejemplos" viewBox="0 0 24 24"><path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H10v16H5.5A1.5 1.5 0 0 1 4 18.5zM10 4h8.5A1.5 1.5 0 0 1 20 5.5v13a1.5 1.5 0 0 1-1.5 1.5H10"/><path d="M13 8h4M13 12h4M13 16h2"/></symbol>
+    <symbol id="i-ayuda" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6V14"/><circle cx="12" cy="17" r=".4" fill="currentColor"/></symbol>
+    <symbol id="i-orbitar" viewBox="0 0 24 24"><circle cx="12" cy="12" r="2.5"/><ellipse cx="12" cy="12" rx="9.5" ry="4" transform="rotate(-25 12 12)"/><path d="m19.5 5.6 1.4-.3-.3 1.4"/></symbol>
+    <symbol id="i-desplazar" viewBox="0 0 24 24"><path d="M12 3v18M3 12h18M12 3 9.5 5.5M12 3l2.5 2.5M12 21l-2.5-2.5M12 21l2.5-2.5M3 12l2.5-2.5M3 12l2.5 2.5M21 12l-2.5-2.5M21 12l-2.5 2.5"/></symbol>
+    <symbol id="i-encuadrar" viewBox="0 0 24 24"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/><circle cx="12" cy="12" r="2.5"/></symbol>
+    <symbol id="i-menos" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol>
+    <symbol id="i-mas" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-verificar" viewBox="0 0 24 24"><path d="M12 3v3M5 6h14M12 6v14M8 20h8"/><path d="M5 6 2.5 12a2.5 2.5 0 0 0 5 0zM19 6l-2.5 6a2.5 2.5 0 0 0 5 0z"/></symbol>
+    <symbol id="i-ok" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></symbol>
+    <symbol id="i-mal" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+    <symbol id="i-nd" viewBox="0 0 24 24"><circle cx="12" cy="12" r="7"/><path d="M7 17 17 7"/></symbol>
+    <symbol id="i-pendiente" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 7.5V12l3 2"/></symbol>
+    <symbol id="i-aviso" viewBox="0 0 24 24"><path d="M12 3.5 2.5 20h19z"/><path d="M12 10v4.5"/><circle cx="12" cy="17.2" r=".4" fill="currentColor"/></symbol>
+  </defs>
+</svg>
+<div class="app">
+
+  <!-- Barra superior -->
+  <div class="topbar">Laboratorio de fuerzas · Universidad de Pamplona</div>
+
+  <!-- Encabezado -->
+  <header class="app-header">
+    <div class="brand">
+      <div class="brand-icon" aria-hidden="true">
+        <svg class="i i-lg"><use href="#i-marca"/></svg>
+      </div>
+      <div class="brand-text">
+        <h1>Simulador tridimensional interactivo</h1>
+        <p>Arma tu propio sistema en 3D, mira las fuerzas de cada cuerpo y comprueba si queda en equilibrio.</p>
+      </div>
+    </div>
+    <div class="header-actions">
+      <span class="system-info">Medidas del sistema internacional: <strong>m · kg · N</strong></span>
+      <label class="ejemplo-sel">
+        <svg class="i" aria-hidden="true"><use href="#i-ejemplos"/></svg>
+        <select id="selEjemplo" aria-label="Cargar un ejemplo de sistema de fuerzas"></select>
+      </label>
+      <button class="btn" id="btnNuevo"><svg class="i" aria-hidden="true"><use href="#i-nuevo"/></svg>Nuevo sistema</button>
+      <button class="btn" id="btnReset"><svg class="i" aria-hidden="true"><use href="#i-restablecer"/></svg>Restablecer</button>
+      <button class="btn" id="btnAyuda"><svg class="i" aria-hidden="true"><use href="#i-ayuda"/></svg>Ayuda</button>
+    </div>
+  </header>
+
+  <!-- Zona de trabajo -->
+  <div class="workspace">
+
+    <!-- Panel izquierdo: construir -->
+    <aside class="panel panel-left">
+      <h2 class="panel-title">Construye tu sistema</h2>
+
+      <div class="section-label">Agrega un elemento</div>
+      <div class="add-list">
+        <button class="add-btn" data-add="cuerpo"><span class="ico"><svg class="i" aria-hidden="true"><use href="#i-cuerpo"/></svg></span> Cuerpo / partícula <kbd class="short">10 máx.</kbd></button>
+        <button class="add-btn" data-add="anclaje"><span class="ico"><svg class="i" aria-hidden="true"><use href="#i-anclaje"/></svg></span> Punto de conexión</button>
+        <button class="add-btn" data-add="cuerda"><span class="ico"><svg class="i" aria-hidden="true"><use href="#i-cuerda"/></svg></span> Cuerda <kbd class="short">30 máx.</kbd></button>
+        <button class="add-btn" data-add="resorte"><span class="ico"><svg class="i" aria-hidden="true"><use href="#i-resorte"/></svg></span> Resorte <kbd class="short">15 máx.</kbd></button>
+        <button class="add-btn" data-add="polea"><span class="ico"><svg class="i" aria-hidden="true"><use href="#i-polea"/></svg></span> Polea ideal <kbd class="short">5 máx.</kbd></button>
+      </div>
+
+      <div class="section-label">Edición</div>
+      <div class="edit-row">
+        <span class="edit-label">Editar</span>
+        <select id="selEditar" aria-label="Seleccionar elemento">
+          <option value="">Seleccionar…</option>
+        </select>
+      </div>
+      <button class="action-btn" data-action="conectar"><span class="ab-txt"><svg class="i" aria-hidden="true"><use href="#i-conectar"/></svg>Conectar</span> <kbd>C</kbd></button>
+      <button class="action-btn" data-action="eliminar"><span class="ab-txt"><svg class="i" aria-hidden="true"><use href="#i-eliminar"/></svg>Eliminar</span> <kbd>Supr</kbd></button>
+
+      <div class="section-label">En la escena</div>
+      <label class="check"><input type="checkbox" id="chkPeso" checked> Vectores de peso</label>
+      <label class="check"><input type="checkbox" id="chkTension" checked> Vectores de tensión</label>
+      <label class="check"><input type="checkbox" id="chkElastica" checked> Vectores elásticos</label>
+      <label class="check"><input type="checkbox" id="chkResultante" checked> Resultante ΣF</label>
+      <label class="check"><input type="checkbox" id="chkComponentes"> Componentes X, Y, Z <small class="muted-inline">(cuerpo de la tabla)</small></label>
+      <label class="check"><input type="checkbox" id="chkEtiquetas" checked> Etiquetas con sus valores</label>
+      <label class="check"><input type="checkbox" id="chkCuadricula" checked> Piso y ejes</label>
+    </aside>
+
+    <!-- Panel central: lienzo 3D -->
+    <section class="panel panel-canvas">
+      <div class="canvas-toolbar">
+        <div class="sysname"><strong id="sysName">Sistema 01</strong>&nbsp; <span id="sysDesc">Cuerpo A con resorte y cuerda</span></div>
+        <div class="tools">
+          <button class="tool active" id="btnOrbitar"><svg class="i" aria-hidden="true"><use href="#i-orbitar"/></svg>Orbitar</button>
+          <button class="tool" id="btnDesplazar"><svg class="i" aria-hidden="true"><use href="#i-desplazar"/></svg>Desplazar</button>
+          <div class="zoom-group">
+            <button class="tool" id="zoomOut" aria-label="Reducir zoom"><svg class="i" aria-hidden="true"><use href="#i-menos"/></svg></button>
+            <span class="zoom-val" id="zoomPct">100 %</span>
+            <button class="tool" id="zoomIn" aria-label="Aumentar zoom"><svg class="i" aria-hidden="true"><use href="#i-mas"/></svg></button>
+          </div>
+          <button class="tool" id="btnEncuadrar"><svg class="i" aria-hidden="true"><use href="#i-encuadrar"/></svg>Encuadrar</button>
+        </div>
+      </div>
+
+      <div class="canvas-stage" id="stage">
+        <canvas id="scene"></canvas>
+        <div class="canvas-badge"><strong>Visión 3D</strong> <span>ejes en centímetros · kilos y newtons</span><span id="escalaVec"></span></div>
+        <div class="canvas-note" id="canvasNote">
+          Cargando la escena 3D…
+        </div>
+      </div>
+
+      <div class="canvas-footer">
+        <div class="sel-info">
+          <strong id="selNombre">Nada seleccionado todavía</strong>
+          <span id="selNota">Haz clic sobre un elemento de la escena para verlo aquí.</span>
+        </div>
+        <div class="hint" id="hintInteraccion">Arrastra un elemento para moverlo en horizontal · con <kbd>Mayús</kbd> lo subes o bajas · con el fondo, orbitas</div>
+      </div>
+    </section>
+
+    <!-- Panel derecho: propiedades -->
+    <aside class="panel panel-right">
+      <div class="prop-head">
+        <h2 class="panel-title">Propiedades</h2>
+        <span class="prop-entity" id="propEntity">—</span>
+      </div>
+
+      <!-- Se construye según el elemento seleccionado -->
+      <div id="propsDinamico"></div>
+
+      <!-- Datos de todo el sistema (siempre visibles) -->
+      <div class="section-label">Todo el sistema</div>
+      <div class="field">
+        <label for="inGravedad">Gravedad (jala hacia −Y)</label>
+        <input id="inGravedad" type="text" value="9,81" inputmode="decimal">
+        <span class="unit">m/s²</span>
+        <small class="field-msg" hidden></small>
+      </div>
+
+      <label class="check strong"><input type="checkbox" id="chkAuto" checked> Actualiza los resultados mientras edito</label>
+
+      <button class="btn-apply" id="btnAplicar"><svg class="i" aria-hidden="true"><use href="#i-verificar"/></svg>Verificar equilibrio</button>
+
+      <p class="method-note">Se resuelve con ΣF = 0, cuerpo por cuerpo. Las cuerdas no pesan y las poleas son ideales, así que no se calculan momentos.</p>
+    </aside>
+  </div>
+
+  <!-- Resultados -->
+  <section class="results">
+    <div class="results-head">
+      <div>
+        <h2 class="inline">Fuerzas sobre <select id="selCuerpoTabla" aria-label="Cuerpo de la tabla"></select></h2>
+        <span id="forcesCount"></span>
+      </div>
+      <div class="results-meta" id="resultsMeta">Valores al día · con 2 decimales</div>
+    </div>
+
+    <div class="results-grid">
+      <div class="main-col">
+      <div class="table-wrap">
+        <table class="force-table">
+          <thead>
+            <tr>
+              <th>Fuerza</th><th>Categoría</th><th>De dónde sale</th><th class="num">Magnitud (N)</th>
+              <th class="num">X (N)</th><th class="num">Y (N)</th><th class="num">Z (N)</th>
+            </tr>
+          </thead>
+          <tbody id="tbFuerzas"></tbody>
+          <tfoot>
+            <tr class="resultante" id="rowResultante">
+              <td id="resLabel">Suma de todas ΣF</td><td id="resCateg"></td><td id="resOrigen">Resultado neto</td>
+              <td class="num" id="resMag">0,00</td>
+              <td class="num" id="resX">0,00</td>
+              <td class="num" id="resY">0,00</td>
+              <td class="num" id="resZ">0,00</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+
+      <div class="dev-panel" id="devPanel" hidden>
+        <div class="dev-head">
+          <strong id="devTitle">Desarrollo</strong>
+          <button class="btn" id="devClose">Ocultar</button>
+        </div>
+        <div class="dev-body" id="devBody"></div>
+      </div>
+      </div>
+
+      <div class="side-col">
+      <div class="status-card ok" id="statusCard">
+        <div class="status-top">
+          <span class="status-title" id="statusTitle"><svg class="i" aria-hidden="true"><use href="#i-ok"/></svg>En equilibrio</span>
+          <span class="status-tag">Ahora mismo</span>
+        </div>
+        <div class="status-value" id="statusValue">0,00 N</div>
+        <div class="status-detail" id="statusDetail"></div>
+      </div>
+
+      <div class="issues-card" id="issuesCard" hidden>
+        <div class="issues-head"><strong><svg class="i" aria-hidden="true"><use href="#i-aviso"/></svg>Avisos de la configuración</strong> <span id="issuesCount"></span></div>
+        <ul class="issues-list" id="issuesList"></ul>
+      </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Estado dinámico según la acción del usuario -->
+  <section class="reference">
+    <div class="ref-label" id="refLabel">Estado del sistema</div>
+    <div class="state-showcase" id="stateShowcase">
+      <button class="state-card ok" id="stateCard">
+        <span class="state-icon" id="stateIcon"><svg class="i" aria-hidden="true"><use href="#i-ok"/></svg></span>
+        <span class="state-body">
+          <strong id="stateHeading">En equilibrio</strong>
+          <span id="stateText"></span>
+        </span>
+        <span class="state-tag" id="stateTag">Ahora mismo</span>
+      </button>
+    </div>
+    <p class="ref-hint">Esta tarjeta cambia según lo que hagas: verifica el equilibrio, agrega o quita elementos, o revisa los datos que escribiste.</p>
+  </section>
+</div>
+
+<!-- Diálogo de ayuda -->
+<dialog id="dlgAyuda">
+  <div class="dlg-head">
+    <h3>¿Cómo funciona esta pantalla?</h3>
+    <button class="btn" id="btnCerrarAyuda">Entendido</button>
+  </div>
+  <div class="dlg-body">
+    <p><strong>Construir el sistema</strong></p>
+    <ul>
+      <li><strong>Cuerpo / partícula</strong>: pulsa el botón y haz clic en el piso para colocarlo. Queda flotando; luego lo arrastras o editas sus coordenadas.</li>
+      <li><strong>Punto de conexión</strong>: así se crea un anclaje fijo (techo o muro) donde amarras cuerdas o resortes.</li>
+      <li><strong>Cuerda y resorte</strong>: pulsa el botón, elige el primer punto (cuerpo o anclaje) y luego el segundo. Una cuerda no puede ir de anclaje a anclaje.</li>
+      <li><strong>Polea ideal</strong>: abre el catálogo con dos configuraciones, la <em>fija simple</em> (redirige una cuerda que ya existe) y la <em>móvil con dos tramos</em> (se une a un cuerpo y lo sostiene con dos tramos).</li>
+      <li><strong>Ejemplos</strong>: en la lista de la cabecera puedes cargar sistemas ya armados y en equilibrio (resorte con polea fija, tres cuerdas en 3D, resortes en serie y polea móvil). «Restablecer» vuelve a cargar el ejemplo elegido.</li>
+      <li><strong>Editar / Eliminar</strong>: selecciona el elemento en la escena o en la lista; si tiene conexiones, se pide confirmación y se retiran en cadena.</li>
+    </ul>
+    <p><strong>La escena</strong></p>
+    <ul>
+      <li><strong>Orbitar:</strong> sostén el clic sobre el fondo y arrastra (es el modo por defecto).</li>
+      <li><strong>Desplazar:</strong> cambia el arrastre para mover la vista de lado.</li>
+      <li><strong>Zoom:</strong> usa la rueda del ratón o los botones − y +.</li>
+      <li><strong>Encuadrar:</strong> devuelve la cámara a su posición inicial (un doble clic también lo hace).</li>
+      <li><strong>Teclado:</strong> flechas para orbitar, <kbd>+</kbd> / <kbd>−</kbd> para el zoom, <kbd>0</kbd> para encuadrar, <kbd>C</kbd> para una cuerda nueva, <kbd>Supr</kbd> para eliminar y <kbd>Esc</kbd> para cancelar. Mientras colocas un cuerpo o anclaje, <kbd>Enter</kbd> lo deja en la posición por defecto; mientras tiendes una cuerda o un resorte, puedes elegir los extremos en la lista «Editar».</li>
+    </ul>
+    <p><strong>Los datos y la verificación</strong></p>
+    <ul>
+      <li>Masa, posiciones, tensión, constante k y longitud en reposo son tuyas para editar (usa coma para los decimales).</li>
+      <li>La cuerda empieza <strong>sin tensión definida</strong>: en Propiedades asignas un valor conocido o la marcas como <strong>desconocida (incógnita)</strong>. Con la incógnita la suma queda parcial y no se emite veredicto.</li>
+      <li>El peso, el largo del resorte, su estiramiento y su fuerza se calculan solos con la geometría de la escena, y cada valor aparece clasificado como <strong>calculada</strong> o <strong>conocida</strong>.</li>
+      <li>Con «Verificar equilibrio» sumamos las fuerzas y comparamos |ΣF| con la tolerancia de 0,01 N; si falta algún dato, el estado es <strong>No determinado</strong>.</li>
+      <li>Si las actualizaciones en vivo están activas, todo se recalcula al instante mientras escribes; los valores inválidos no se aceptan y se avisa sin perder el anterior.</li>
+      <li>Al pulsar una fila de la tabla aparece el <strong>desarrollo del cálculo</strong> de esa fuerza, con la fórmula y los valores sustituidos.</li>
+    </ul>
+    <p class="muted">Convenios: el eje Y apunta hacia arriba y la gravedad jala en −Y. Las coordenadas se escriben en metros; los ejes de la escena se rotulan en centímetros y se alargan solos hasta abarcar todos los elementos.</p>
+  </div>
+</dialog>
+
+<!-- Diálogo del catálogo de poleas -->
+<dialog id="dlgPolea">
+  <div class="dlg-head">
+    <h3>Nueva polea ideal</h3>
+    <button class="btn" data-cerrar="dlgPolea">Cancelar</button>
+  </div>
+  <form method="dialog" class="dlg-body" id="formPolea">
+    <p class="dlg-intro">Elige una configuración del catálogo del simulador.</p>
+
+    <label class="radio-row">
+      <input type="radio" name="plTipo" value="fija" checked>
+      <span class="radio-txt"><strong>Polea fija simple</strong><span>Redirige una cuerda que ya existe: la cuerda queda en dos tramos y la tensión se mantiene igual en ambos.</span></span>
+    </label>
+    <label class="radio-row">
+      <input type="radio" name="plTipo" value="movil">
+      <span class="radio-txt"><strong>Móvil con dos tramos</strong><span>Se une a un cuerpo y lo sostiene: la fuerza sobre él es la suma de las tensiones de los dos tramos.</span></span>
+    </label>
+
+    <div class="pick-block" id="poleaPickFija">
+      <label class="pick-label" for="selCuerdaPolea">Cuerda a redirigir</label>
+      <select id="selCuerdaPolea" class="big-sel"></select>
+      <small class="pick-hint" id="poleaFijaHint">Colocarás la polea con un clic en la escena; al final la podrás arrastrar.</small>
+    </div>
+    <div class="pick-block" id="poleaPickMovil" hidden>
+      <label class="pick-label" for="selCuerpoPolea">Cuerpo que carga la polea</label>
+      <select id="selCuerpoPolea" class="big-sel"></select>
+      <small class="pick-hint">La polea quedará unida al cuerpo y el simulador le creará un soporte con su cuerda de dos tramos.</small>
+    </div>
+
+    <div class="dlg-foot">
+      <button type="submit" class="btn" value="cancel">Cancelar</button>
+      <button type="submit" class="btn primary" id="btnPoleaOK" value="ok">Seguir</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- Diálogo de confirmación para eliminar con dependencias -->
+<dialog id="dlgConfirmar">
+  <div class="dlg-head">
+    <h3 id="confTitulo">Eliminar elemento</h3>
+  </div>
+  <form method="dialog" class="dlg-body">
+    <p id="confTexto"></p>
+    <ul id="confLista"></ul>
+    <div class="dlg-foot">
+      <button type="submit" class="btn" value="cancel">Conservar todo</button>
+      <button type="submit" class="btn danger" id="confOK" value="ok" autofocus>Sí, eliminar</button>
+    </div>
+  </form>
+</dialog>
+
+<div class="toast" id="toast"></div>
+
+<script src="engine.js"></script>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+<script src="app.js"></script>
+</body>
+</html>
