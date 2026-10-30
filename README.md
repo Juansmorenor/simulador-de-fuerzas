@@ -74,9 +74,3 @@ o cualquier servidor estático, y visita `http://localhost:8080`.
 - Gravedad: 9,81 m/s² por defecto (editable)
 - Decimales: coma (ej. 2,00) según es-CO
 - Tolerancia de equilibrio: 0,01 N
-
----
-
-## Licencia
-
-Uso académico — Universidad de Pamplona.
